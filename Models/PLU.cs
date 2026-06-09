@@ -18,5 +18,7 @@ namespace CashRegister.Models
         public int DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
+
+        public ICollection<TransactionItem> TransactionItems { get; set; }
     }
 }

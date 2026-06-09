@@ -11,7 +11,7 @@ namespace CashRegister.Models
         [ForeignKey("TransactionId")]
         public Transaction Transaction { get; set; }
 
-        // Navigation property: A transaction item is associated with one PLU
+        // Navigation property: A transaction item is associated with one PLU (product)
         public int PLUId { get; set; }
         [ForeignKey("PLUId")]
         public PLU PLU { get; set;}
