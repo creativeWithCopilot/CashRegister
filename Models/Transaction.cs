@@ -1,17 +1,30 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CashRegister.Models
 {
     public class Transaction
     {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public decimal Subtotal { get; set; } // Calculated as the sum of LineTotals of all TransactionItems
-        public decimal TaxTotal { get; set; } // Calculated as the sum of taxes for all TransactionItems
-        public decimal GrandTotal { get; set; } // Calculated as Subtotal + TaxTotal
+        [Key]
+        public long Id { get; set; }
 
-        // Navigation property: A transaction can have multiple transaction items
-        public ICollection<TransactionItem> TransactionItems { get; set; }
-        
-        // Navigation property: A transaction can have one payment
-        public Payment Payment { get; set; }
+        public DateTime Timestamp { get; set; }
+
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal Subtotal { get; set; } // Sum of all LineTotal values across items.
+
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal TaxTotal { get; set; } // Sum of all TaxAmount values across items.
+
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal Total { get; set; } // Subtotal + TaxTotal
+
+        public PaymentType Payment { get; set; }
+
+        // Navigation Property: A single Transaction can be linked to multiple SaleItem.
+        public ICollection<SaleItem> SaleItems { get; set; }
+
+        [Timestamp] // <-- RowVersion for concurrency
+        public byte[] RowVersion { get; set; }
     }
 }
