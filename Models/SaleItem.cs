@@ -10,9 +10,11 @@ namespace CashRegister.Models
 
         // Navigation Property: Multiple SaleItem can be associated with a single Transaction.
         public long TransactionId { get; set; }
+        [ForeignKey("TransactionId")]
         public Transaction Transaction { get; set; }
-        // // Navigation Property: Multiple SaleItem can be associated with a single Product.
+        // Navigation Property: Multiple SaleItem can be associated with a single Product.
         public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
         public Product Product { get; set; }
 
 

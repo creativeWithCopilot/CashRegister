@@ -13,8 +13,5 @@ namespace CashRegister.Models
         [Required]
         [Column(TypeName = "decimal(6,2)")] // A decimal number with a precision of 6 and a scale of 2.
         public decimal Rate { get; set; } // e.g., 5% for 0.05
-        
-        // Navigation Property: A single tax can be linked to multiple categories.
-        public ICollection<Category> Categories { get; } = null!;
     }
 }

@@ -21,6 +21,6 @@ namespace CashRegister.Models
         // Navigation Property: Multiple Product can be associated with a single category.
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category Category { get; set; } = null!;
     }
 }
