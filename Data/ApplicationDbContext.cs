@@ -40,7 +40,7 @@ namespace CashRegister.Data
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Product)
                 .WithMany()
-                .HasForeignKey(s => s.Product)
+                .HasForeignKey(s => s.ProductId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 

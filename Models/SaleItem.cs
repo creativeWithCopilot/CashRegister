@@ -19,15 +19,14 @@ namespace CashRegister.Models
         [ForeignKey("ProductId")]
         public Product Product { get; set; } = null!; // Required reference navigation to principal
 
-        [Required]
         [Range(1,100)]
-        [Column(TypeName = "decimal(6,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Quantity { get; set; } // supports decimal quantities (weights)
 
-        [Column(TypeName = "decimal(6,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal LineTotal { get; set; } // UnitPrice x Quantity
 
-        [Column(TypeName = "decimal(6,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal TaxAmount { get; set; } // LineTotal × TaxRate
 
         [Timestamp] // <-- RowVersion for concurrency
