@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using CashRegister.Data;
+using CashRegister.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("EFCoreDBConnection")));
 
+// Registering the CustomerService
+builder.Services.AddScoped<TaxService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

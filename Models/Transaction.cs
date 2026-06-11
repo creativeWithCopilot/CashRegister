@@ -19,13 +19,14 @@ namespace CashRegister.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Total { get; set; } // Subtotal + TaxTotal
 
+        [Required(ErrorMessage = "The payment type is required.")]
         public PaymentType Payment { get; set; }
 
         // Navigation Property: A single Transaction can be linked to multiple SaleItem.
         public ICollection<SaleItem> SaleItems { get; set; } = new List<SaleItem>(); // Collection navigation containing dependents
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         [Timestamp] // <-- RowVersion for concurrency
         public byte[] RowVersion { get; set; }

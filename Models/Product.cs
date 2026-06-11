@@ -24,7 +24,7 @@ namespace CashRegister.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; } = null!; // Required reference navigation to principal
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
