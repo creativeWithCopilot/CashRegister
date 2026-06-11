@@ -41,7 +41,7 @@ namespace CashRegister.Controller
             return Ok(response);
         }
 
-        // Updates an existing category.
+        // Updates an existing tax.
         [HttpPut("UpdateTax")]
         public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> UpdateTax([FromBody] TaxUpdateDTO taxDto)
         {
@@ -53,11 +53,11 @@ namespace CashRegister.Controller
             return Ok(response);
         }
 
-        // Deletes a category by ID.
-        [HttpDelete("DeleteTax/{id}")]
-        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteTax(int id)
+        // Deletes a tax by ID.
+        [HttpDelete("DeleteTax")]
+        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteTax(TaxDeleteDTO taxDeleteDto)
         {
-            var response = await _taxService.DeleteTaxAsync(id);
+            var response = await _taxService.DeleteTaxAsync(taxDeleteDto);
             if (response.StatusCode != 200)
             {
                 return StatusCode(response.StatusCode, response);
@@ -65,7 +65,7 @@ namespace CashRegister.Controller
             return Ok(response);
         }
 
-        // Retrieves all categories.
+        // Retrieves all tax.
         [HttpGet("GetAllTaxes")]
         public async Task<ActionResult<ApiResponse<List<TaxResponseDTO>>>> GetAllTaxes()
         {

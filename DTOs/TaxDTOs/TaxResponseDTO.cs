@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace CashRegister.DTOs.TaxDTOs
 {
     public class TaxResponseDTO

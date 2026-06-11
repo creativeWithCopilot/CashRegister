@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using CashRegister.Data;
 using CashRegister.DTOs.TaxDTOs;
 using CashRegister.Models;
 using CashRegister.DTOs;
-
 
 namespace CashRegister.Services
 {
@@ -128,11 +126,11 @@ namespace CashRegister.Services
             }
         }
 
-        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteTaxAsync(int id)
+        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteTaxAsync(TaxDeleteDTO  taxDeleteDTO)
         {
             try
             {
-                var tax = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == id);
+                var tax = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == taxDeleteDTO.Id);
 
                 if (tax == null)
                 {
@@ -145,7 +143,7 @@ namespace CashRegister.Services
                 // Prepare confirmation message
                 var confirmationMessage = new ConfirmationResponseDTO
                 {
-                    Message = $"Category with Id {id} deleted successfully."
+                    Message = $"Tax with Id {taxDeleteDTO.Id} deleted successfully."
                 };
 
                 return new ApiResponse<ConfirmationResponseDTO>(200, confirmationMessage);

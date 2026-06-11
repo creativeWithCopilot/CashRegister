@@ -15,8 +15,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("EFCoreDBConnection")));
 
-// Registering the CustomerService
+// Registering the TaxService
 builder.Services.AddScoped<TaxService>();
+// Registering the CategoryService
+builder.Services.AddScoped<CategoryService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
