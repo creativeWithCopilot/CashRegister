@@ -6,18 +6,18 @@ namespace CashRegister.Models
     public class Category
     {
         [Key]
-        [Required]
         public int Id { get; set; }
 
-        [MaxLength(50)]
-        public string Name { get; set; } // 1..16
+        [Required(ErrorMessage = "The category must be defined.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "The category musb be between 3 and 50 characters.")]
+        public string Name { get; set; }
 
-        [MaxLength(200)]
+        [MaxLength(200, ErrorMessage = "The description must be no more than 200 characters.")]
         public string Description { get; set; }
 
         // Navigation Property: Multiple categories can be associated with a single tax.
-        public int TaxId { get; set; }
+        public int TaxId { get; set; } // Required foreign key property
         [ForeignKey("TaxId")]
-        public Tax Tax { get; set; } = null!;
+        public Tax Tax { get; set; } = null!; // Required reference navigation to principal
     }
 }

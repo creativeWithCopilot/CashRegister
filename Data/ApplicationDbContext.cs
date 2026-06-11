@@ -25,28 +25,32 @@ namespace CashRegister.Data
                 .HasOne(c => c.Tax)
                 .WithMany()
                 .HasForeignKey(c => c.TaxId)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             // One(Category)-to-Many(Product) without navigation to dependents
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             // One(SaleItem)-to-Many(Product) without navigation to dependents
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Product)
                 .WithMany()
                 .HasForeignKey(s => s.Product)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             // One(Transaction)-to-Many(SaleItem) without navigation to Required
             modelBuilder.Entity<Transaction>()
                 .HasMany(t => t.SaleItems)
                 .WithOne(t => t.Transaction)
                 .HasForeignKey(e => e.TransactionId)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

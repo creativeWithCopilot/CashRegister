@@ -9,15 +9,18 @@ namespace CashRegister.Models
         public long Id { get; set; }
 
         // Navigation Property: Multiple SaleItem can be associated with a single Transaction.
-        public long TransactionId { get; set; }
+        [Required]
+        public long TransactionId { get; set; } // Required foreign key property
         [ForeignKey("TransactionId")]
-        public Transaction Transaction { get; set; }
+        public Transaction Transaction { get; set; } = null!; // Required reference navigation to principal
         // Navigation Property: Multiple SaleItem can be associated with a single Product.
-        public int ProductId { get; set; }
+        [Required]
+        public int ProductId { get; set; } // Required foreign key property
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public Product Product { get; set; } = null!; // Required reference navigation to principal
 
-
+        [Required]
+        [Range(1,100)]
         [Column(TypeName = "decimal(6,2)")]
         public decimal Quantity { get; set; } // supports decimal quantities (weights)
 
