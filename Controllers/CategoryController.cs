@@ -19,7 +19,7 @@ namespace CashRegister.Controller
         
         // Creates a new type of category.
         [HttpPost("CreateCategory")]
-        public async Task<ActionResult<ApiResponse<CategoryRespondDTO>>> CreateCategory([FromBody] CategoryCreateDTO taxDto)
+        public async Task<ActionResult<ApiResponse<CategoryResponseDTO>>> CreateCategory([FromBody] CategoryCreateDTO taxDto)
         {
             var response = await _categoryService.CreateCategoryAsync(taxDto);
             if (response.StatusCode != 200)
@@ -31,7 +31,7 @@ namespace CashRegister.Controller
 
         // Retrieves a category by ID.
         [HttpGet("GetCategoryById/{id}")]
-        public async Task<ActionResult<ApiResponse<CategoryRespondDTO>>> GetCategoryById(int id)
+        public async Task<ActionResult<ApiResponse<CategoryResponseDTO>>> GetCategoryById(int id)
         {
             var response = await _categoryService.GetCategoryByIdAsync(id);
             if (response.StatusCode != 200)
@@ -67,7 +67,7 @@ namespace CashRegister.Controller
 
         // Retrieves all category.
         [HttpGet("GetAllCategories")]
-        public async Task<ActionResult<ApiResponse<List<CategoryRespondDTO>>>> GetAllCategories()
+        public async Task<ActionResult<ApiResponse<List<CategoryResponseDTO>>>> GetAllCategories()
         {
             var response = await _categoryService.GetAllCategoriesAsync();
             if (response.StatusCode != 200)

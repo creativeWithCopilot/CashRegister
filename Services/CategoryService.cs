@@ -15,20 +15,20 @@ namespace CashRegister.Services
             _context = context;
         }
 
-        public async Task<ApiResponse<CategoryRespondDTO>> CreateCategoryAsync(CategoryCreateDTO categoryDto)
+        public async Task<ApiResponse<CategoryResponseDTO>> CreateCategoryAsync(CategoryCreateDTO categoryDto)
         {
             try
             {
                 // Check if category name already exists (case-insensitive)
                 if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower()))
                 {
-                    return new ApiResponse<CategoryRespondDTO>(400, "This category name already exists.");
+                    return new ApiResponse<CategoryResponseDTO>(400, "This category name already exists.");
                 }
 
                 // Check if Tax exists
                 if (!await _context.Taxes.AnyAsync(t => t.Id == categoryDto.TaxId))
                 {
-                    return new ApiResponse<CategoryRespondDTO>(400, "The specified type of tax does not exist.");
+                    return new ApiResponse<CategoryResponseDTO>(400, "The specified type of tax does not exist.");
                 }
 
                 // Manual mapping from DTO to Model
@@ -43,8 +43,8 @@ namespace CashRegister.Services
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
 
-                // Map to CategoryRespondDTO
-                var categoryRespond = new CategoryRespondDTO
+                // Map to CategoryResponseDTO
+                var categoryResponse = new CategoryResponseDTO
                 {
                     Id = category.Id,
                     Name = category.Name,
@@ -52,16 +52,16 @@ namespace CashRegister.Services
                     TaxId = category.TaxId
                 };
 
-                return new ApiResponse<CategoryRespondDTO>(200, categoryRespond);
+                return new ApiResponse<CategoryResponseDTO>(200, categoryResponse);
             }
             catch (Exception ex)
             {
                 // Log the exception (implementation depends on your logging setup)
-                return new ApiResponse<CategoryRespondDTO>(500, $"An unexpected error occurred while processing your request, Error: {ex.Message}");
+                return new ApiResponse<CategoryResponseDTO>(500, $"An unexpected error occurred while processing your request, Error: {ex.Message}");
             }
         }
 
-        public async Task<ApiResponse<CategoryRespondDTO>> GetCategoryByIdAsync(int id)
+        public async Task<ApiResponse<CategoryResponseDTO>> GetCategoryByIdAsync(int id)
         {
             try
             {
@@ -71,11 +71,11 @@ namespace CashRegister.Services
 
                 if (category == null)
                 {
-                    return new ApiResponse<CategoryRespondDTO>(404, "This category was not found.");
+                    return new ApiResponse<CategoryResponseDTO>(404, "This category was not found.");
                 }
 
-                // Map to CategoryRespondDTO
-                var categoryRespond = new CategoryRespondDTO
+                // Map to CategoryResponseDTO
+                var categoryResponse = new CategoryResponseDTO
                 {
                     Id = category.Id,
                     Name = category.Name,
@@ -83,12 +83,12 @@ namespace CashRegister.Services
                     TaxId = category.TaxId,
                 };
 
-                return new ApiResponse<CategoryRespondDTO>(200, categoryRespond);
+                return new ApiResponse<CategoryResponseDTO>(200, categoryResponse);
             }
             catch (Exception ex)
             {
                 // Log the exception
-                return new ApiResponse<CategoryRespondDTO>(500, $"An unexpected error occurred while processing your request, Error: {ex.Message}");
+                return new ApiResponse<CategoryResponseDTO>(500, $"An unexpected error occurred while processing your request, Error: {ex.Message}");
             }
         }
 
@@ -147,7 +147,7 @@ namespace CashRegister.Services
                     return new ApiResponse<ConfirmationResponseDTO>(404, "This category was not found.");
                 }
 
-                // Implementing Soft Delete
+                // Implementing Delete
                 _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
 
@@ -166,7 +166,7 @@ namespace CashRegister.Services
             }
         }
 
-        public async Task<ApiResponse<List<CategoryRespondDTO>>> GetAllCategoriesAsync()
+        public async Task<ApiResponse<List<CategoryResponseDTO>>> GetAllCategoriesAsync()
         {
             try
             {
@@ -174,7 +174,7 @@ namespace CashRegister.Services
                     .AsNoTracking()
                     .ToListAsync();
 
-                var categoryList = categories.Select(c => new CategoryRespondDTO
+                var categoryList = categories.Select(c => new CategoryResponseDTO
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -182,12 +182,12 @@ namespace CashRegister.Services
                     TaxId = c.TaxId,
                 }).ToList();
 
-                return new ApiResponse<List<CategoryRespondDTO>>(200, categoryList);
+                return new ApiResponse<List<CategoryResponseDTO>>(200, categoryList);
             }
             catch (Exception ex)
             {
                 // Log the exception
-                return new ApiResponse<List<CategoryRespondDTO>>(500, $"An unexpected error occurred while processing your request, Error: {ex.Message}");
+                return new ApiResponse<List<CategoryResponseDTO>>(500, $"An unexpected error occurred while processing your request, Error: {ex.Message}");
             }
         }
     }
