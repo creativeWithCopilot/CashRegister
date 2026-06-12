@@ -5,7 +5,7 @@ namespace CashRegister.DTOs.ProductDTOs
 {
     public class ProductResponseDTO
     {
-        public int PLUCode { get; set; } // A 4-digit PLU code is represented as a 5-digit code by adding a leading zero.
+        public string PLUCode { get; set; } // A 4-digit PLU code is represented as a 5-digit code by adding a leading zero.
         public string Description { get; set; }
         public decimal Price { get; set; }
 

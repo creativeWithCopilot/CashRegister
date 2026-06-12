@@ -31,7 +31,7 @@ namespace CashRegister.Controller
 
         // Retrieves a product by ID.
         [HttpGet("GetProductById/{pluCode}")]
-        public async Task<ActionResult<ApiResponse<ProductResponseDTO>>> GetProductById(int pluCode)
+        public async Task<ActionResult<ApiResponse<ProductResponseDTO>>> GetProductById(string pluCode)
         {
             var response = await _productService.GetProductByIdAsync(pluCode);
             if (response.StatusCode != 200)

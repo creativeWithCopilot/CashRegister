@@ -15,7 +15,7 @@ namespace CashRegister.Models
         public Transaction Transaction { get; set; } = null!; // Required reference navigation to principal
         // Navigation Property: Multiple SaleItem can be associated with a single Product.
         [Required]
-        public int ProductId { get; set; } // Required foreign key property
+        public string ProductId { get; set; } // Required foreign key property
         [ForeignKey("ProductId")]
         public Product Product { get; set; } = null!; // Required reference navigation to principal
 

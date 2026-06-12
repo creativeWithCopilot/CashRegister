@@ -6,9 +6,9 @@ namespace CashRegister.DTOs.ProductDTOs
     public class ProductCreateDTO
     {
         [Required(ErrorMessage = "A PLU code is necessary.")]
-        [Range(00000, 99999, ErrorMessage = "PLU codes must consist of 5 digits. A 4-digit PLU code is represented as a 5-digit code by adding a leading zero.")]
+        [RegularExpression(@"^\d{5}$", ErrorMessage = "PLU codes must consist of 5 digits. A 4-digit PLU code is represented as a 5-digit code by adding a leading zero.")]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int PLUCode { get; set; } // A 4-digit PLU code is represented as a 5-digit code by adding a leading zero.
+        public string PLUCode { get; set; } // A 4-digit PLU code is represented as a 5-digit code by adding a leading zero.
 
         [MaxLength(200, ErrorMessage = "The description must be no more than 200 characters.")]
         public string Description { get; set; }

@@ -65,7 +65,7 @@ namespace CashRegister.Services
             }
         }
 
-        public async Task<ApiResponse<ProductResponseDTO>> GetProductByIdAsync(int pluCode)
+        public async Task<ApiResponse<ProductResponseDTO>> GetProductByIdAsync(string pluCode)
         {
             try
             {
