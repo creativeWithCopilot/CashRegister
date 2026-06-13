@@ -22,13 +22,13 @@ namespace CashRegister.Services
                 // Check if category name already exists (case-insensitive)
                 if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower()))
                 {
-                    return new ApiResponse<CategoryResponseDTO>(400, "This category name already exists.");
+                    return new ApiResponse<CategoryResponseDTO>(400, "This category already exists.");
                 }
 
-                // Check if Tax exists
-                if (!await _context.Taxes.AnyAsync(t => t.Id == categoryDto.TaxId))
+                // Check if category exists
+                if (!await _context.Taxes.AnyAsync(tax => tax.Id == categoryDto.TaxId))
                 {
-                    return new ApiResponse<CategoryResponseDTO>(400, "The specified type of tax does not exist.");
+                    return new ApiResponse<CategoryResponseDTO>(400, "The specified category type does not exist.");
                 }
 
                 // Manual mapping from DTO to Model
@@ -36,6 +36,7 @@ namespace CashRegister.Services
                 {
                     Name = categoryDto.Name,
                     Description = categoryDto.Description,
+                    IsActive = true,
                     TaxId = categoryDto.TaxId
                 };
 
@@ -49,6 +50,7 @@ namespace CashRegister.Services
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
+                    IsActive = category.IsActive,
                     TaxId = category.TaxId
                 };
 
@@ -80,6 +82,7 @@ namespace CashRegister.Services
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
+                    IsActive = category.IsActive,
                     TaxId = category.TaxId,
                 };
 
@@ -99,7 +102,7 @@ namespace CashRegister.Services
                 var category = await _context.Categories.FindAsync(categoryDto.Id);
                 if (category == null)
                 {
-                    return new ApiResponse<ConfirmationResponseDTO>(404, "This category name already exists.");
+                    return new ApiResponse<ConfirmationResponseDTO>(404, "This category already exists.");
                 }
 
                 // Check if the new category name already exists (case-insensitive), excluding the current category
@@ -117,6 +120,7 @@ namespace CashRegister.Services
                 // Update product properties manually
                 category.Name = categoryDto.Name;
                 category.Description = categoryDto.Description;
+                category.IsActive = categoryDto.IsActive;
                 category.TaxId = categoryDto.TaxId;
 
                 await _context.SaveChangesAsync();
@@ -136,25 +140,25 @@ namespace CashRegister.Services
             }
         }
 
-        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteCategoryAsync(CategoryDeleteDTO categoryDeleteDTO)
+        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteCategoryAsync(int id )
         {
             try
             {
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryDeleteDTO.Id);
+                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
                 if (category == null)
                 {
                     return new ApiResponse<ConfirmationResponseDTO>(404, "This category was not found.");
                 }
 
-                // Implementing Delete
-                _context.Categories.Remove(category);
+                //Soft Delete
+                category.IsActive = false;
                 await _context.SaveChangesAsync();
 
                 // Prepare confirmation message
                 var confirmationMessage = new ConfirmationResponseDTO
                 {
-                    Message = $"Category with Id {categoryDeleteDTO.Id} deleted successfully."
+                    Message = $"Category with Id {id} deleted successfully."
                 };
 
                 return new ApiResponse<ConfirmationResponseDTO>(200, confirmationMessage);
@@ -179,7 +183,8 @@ namespace CashRegister.Services
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description,
-                    TaxId = c.TaxId,
+                    IsActive = c.IsActive,
+                    TaxId = c.TaxId
                 }).ToList();
 
                 return new ApiResponse<List<CategoryResponseDTO>>(200, categoryList);

@@ -15,6 +15,8 @@ namespace CashRegister.Models
         [MaxLength(200, ErrorMessage = "The description must be no more than 200 characters.")]
         public string Description { get; set; }
 
+        public bool IsActive { get; set; }
+
         // Navigation Property: Multiple categories can be associated with a single tax.
         public int TaxId { get; set; } // Required foreign key property
         [ForeignKey("TaxId")]

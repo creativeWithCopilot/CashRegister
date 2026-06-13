@@ -18,6 +18,8 @@ namespace CashRegister.DTOs.ProductDTOs
         [Column(TypeName = "decimal(10,2)")] // A decimal number with a precision of 6 and a scale of 2.
         public decimal Price { get; set; }
 
+        public bool IsActive { get; set; }
+
         // Navigation Property: Multiple Product can be associated with a single category.
         public int CategoryId { get; set; } // Required foreign key property
 

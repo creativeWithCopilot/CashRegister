@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CashRegister.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class withSoftDelete : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,6 +19,7 @@ namespace CashRegister.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Type = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Rate = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -55,6 +56,7 @@ namespace CashRegister.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     TaxId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -72,9 +74,10 @@ namespace CashRegister.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    PLUCode = table.Column<int>(type: "INTEGER", nullable: false),
+                    PLUCode = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
@@ -97,7 +100,7 @@ namespace CashRegister.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     TransactionId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<string>(type: "TEXT", nullable: false),
                     Quantity = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     LineTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     TaxAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),

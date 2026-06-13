@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashRegister.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260612080721_swapBackDeleteBehavior.Restrict")]
-    partial class swapBackDeleteBehaviorRestrict
+    [Migration("20260613042939_withSoftDelete")]
+    partial class withSoftDelete
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,9 @@ namespace CashRegister.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -48,8 +51,8 @@ namespace CashRegister.Migrations
 
             modelBuilder.Entity("CashRegister.Models.Product", b =>
                 {
-                    b.Property<int>("PLUCode")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("PLUCode")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
@@ -61,6 +64,9 @@ namespace CashRegister.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
@@ -84,8 +90,9 @@ namespace CashRegister.Migrations
                     b.Property<decimal>("LineTotal")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(10,2)");
@@ -119,6 +126,9 @@ namespace CashRegister.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(5,2)");

@@ -14,8 +14,10 @@ namespace CashRegister.Models
 
         [Required(ErrorMessage = "The tax rate must be specified.")]
         [Range(0.01, 100.00, ErrorMessage = "The tax rate must be between $0.01 and $100.00.")]
-        [Column(TypeName = "decimal(5,2)")] // A decimal number with a precision of 6 and a scale of 2.
+        [Column(TypeName = "decimal(5,2)")] // A decimal number with a precision of 5 and a scale of 2.
         public decimal Rate { get; set; } // e.g., 5% for 0.05
+
+        public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

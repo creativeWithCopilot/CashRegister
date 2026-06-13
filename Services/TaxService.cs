@@ -30,6 +30,7 @@ namespace CashRegister.Services
                 {
                     Type = taxDto.Type,
                     Rate = taxDto.Rate,
+                    IsActive = true,
                     CreatedAt = DateTime.Now
                 };
 
@@ -43,6 +44,7 @@ namespace CashRegister.Services
                     Id = tax.Id,
                     Type = tax.Type,
                     Rate = tax.Rate,
+                    IsActive = tax.IsActive,
                     CreatedAt = tax.CreatedAt,
                     UpdatedAt = tax.UpdatedAt
                 };
@@ -75,6 +77,7 @@ namespace CashRegister.Services
                     Id = tax.Id,
                     Type = tax.Type,
                     Rate = tax.Rate,
+                    IsActive = tax.IsActive,
                     CreatedAt = tax.CreatedAt,
                     UpdatedAt = tax.UpdatedAt
                 };
@@ -107,6 +110,7 @@ namespace CashRegister.Services
                 // Update tax properties manually
                 tax.Type = taxDto.Type;
                 tax.Rate = taxDto.Rate;
+                tax.IsActive = taxDto.IsActive;
                 tax.UpdatedAt = DateTime.Now;
 
                 await _context.SaveChangesAsync();
@@ -126,24 +130,25 @@ namespace CashRegister.Services
             }
         }
 
-        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteTaxAsync(TaxDeleteDTO  taxDeleteDTO)
+        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteTaxAsync(int id)
         {
             try
             {
-                var tax = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == taxDeleteDTO.Id);
+                var tax = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == id);
 
                 if (tax == null)
                 {
                     return new ApiResponse<ConfirmationResponseDTO>(404, "The type of tax is not found.");
                 }
 
-                _context.Taxes.Remove(tax);
+                //Soft Delete
+                tax.IsActive = false;
                 await _context.SaveChangesAsync();
 
                 // Prepare confirmation message
                 var confirmationMessage = new ConfirmationResponseDTO
                 {
-                    Message = $"Tax with Id {taxDeleteDTO.Id} deleted successfully."
+                    Message = $"Tax with Id {id} deleted successfully."
                 };
 
                 return new ApiResponse<ConfirmationResponseDTO>(200, confirmationMessage);
@@ -168,6 +173,7 @@ namespace CashRegister.Services
                     Id = t.Id,
                     Type = t.Type,
                     Rate = t.Rate,
+                    IsActive = t.IsActive,
                     CreatedAt = t.CreatedAt,
                     UpdatedAt = t.UpdatedAt
                 }).ToList();

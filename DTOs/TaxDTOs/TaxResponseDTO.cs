@@ -5,6 +5,7 @@ namespace CashRegister.DTOs.TaxDTOs
         public int Id { get; set; }
         public string Type { get; set; }
         public decimal Rate { get; set; }
+        public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

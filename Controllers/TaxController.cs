@@ -54,10 +54,10 @@ namespace CashRegister.Controller
         }
 
         // Deletes a tax by ID.
-        [HttpDelete("DeleteTax")]
-        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteTax(TaxDeleteDTO taxDeleteDto)
+        [HttpDelete("DeleteTax/{id}")]
+        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteTax(int id)
         {
-            var response = await _taxService.DeleteTaxAsync(taxDeleteDto);
+            var response = await _taxService.DeleteTaxAsync(id);
             if (response.StatusCode != 200)
             {
                 return StatusCode(response.StatusCode, response);

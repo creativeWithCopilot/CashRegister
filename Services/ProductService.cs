@@ -51,6 +51,7 @@ namespace CashRegister.Services
                     PLUCode = product.PLUCode,
                     Description = product.Description,
                     Price = product.Price,
+                    IsActive = product.IsActive,
                     CategoryId = product.CategoryId,
                     CreatedAt = product.CreatedAt,
                     UpdatedAt = product.UpdatedAt
@@ -84,6 +85,7 @@ namespace CashRegister.Services
                     PLUCode = product.PLUCode,
                     Description = product.Description,
                     Price = product.Price,
+                    IsActive = product.IsActive,
                     CategoryId = product.CategoryId,
                     CreatedAt = product.CreatedAt,
                     UpdatedAt = product.UpdatedAt
@@ -124,6 +126,7 @@ namespace CashRegister.Services
                 product.PLUCode = productDto.PLUCode;
                 product.Description = productDto.Description;
                 product.Price = productDto.Price;
+                product.IsActive = productDto.IsActive;
                 product.CategoryId = productDto.CategoryId;
                 product.UpdatedAt = DateTime.Now;
 
@@ -144,25 +147,26 @@ namespace CashRegister.Services
             }
         }
 
-        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteProductAsync(ProductDeleteDTO productDeleteDTO)
+        public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteProductAsync(string pluCode)
         {
             try
             {
                 var product = await _context.Products
-                    .FirstOrDefaultAsync(p => p.PLUCode == productDeleteDTO.PLUCode);
+                    .FirstOrDefaultAsync(p => p.PLUCode == pluCode);
 
                 if (product == null)
                 {
                     return new ApiResponse<ConfirmationResponseDTO>(404, "Product not found.");
                 }
 
-                _context.Products.Remove(product);
+                // Implementing Soft Delete
+                product.IsActive = false;
                 await _context.SaveChangesAsync();
 
                 // Prepare confirmation message
                 var confirmationMessage = new ConfirmationResponseDTO
                 {
-                    Message = $"Product with PLU code {productDeleteDTO.PLUCode} deleted successfully."
+                    Message = $"Product with PLU code {pluCode} deleted successfully."
                 };
 
                 return new ApiResponse<ConfirmationResponseDTO>(200, confirmationMessage);
@@ -187,6 +191,7 @@ namespace CashRegister.Services
                     PLUCode = p.PLUCode,
                     Description = p.Description,
                     Price = p.Price,
+                    IsActive = p.IsActive,
                     CategoryId = p.CategoryId,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt
@@ -222,6 +227,7 @@ namespace CashRegister.Services
                     PLUCode = p.PLUCode,
                     Description = p.Description,
                     Price = p.Price,
+                    IsActive = p.IsActive,
                     CategoryId = p.CategoryId,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt

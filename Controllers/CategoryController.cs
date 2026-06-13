@@ -54,10 +54,10 @@ namespace CashRegister.Controller
         }
 
         // Deletes a category by ID.
-        [HttpDelete("DeleteCategory")]
-        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteCategory(CategoryDeleteDTO categoryDeleteDto)
+        [HttpDelete("DeleteCategory/{id}")]
+        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteCategory(int id)
         {
-            var response = await _categoryService.DeleteCategoryAsync(categoryDeleteDto);
+            var response = await _categoryService.DeleteCategoryAsync(id);
             if (response.StatusCode != 200)
             {
                 return StatusCode(response.StatusCode, response);

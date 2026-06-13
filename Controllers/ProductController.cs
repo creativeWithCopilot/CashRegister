@@ -54,10 +54,10 @@ namespace CashRegister.Controller
         }
 
         // Deletes a product by ID.
-        [HttpDelete("DeleteProduct")]
-        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteProduct(ProductDeleteDTO productDeleteDTO)
+        [HttpDelete("DeleteProduct/{pluCode}")]
+        public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteProduct(string pluCode)
         {
-            var response = await _productService.DeleteProductAsync(productDeleteDTO);
+            var response = await _productService.DeleteProductAsync(pluCode);
             if (response.StatusCode != 200)
             {
                 return StatusCode(response.StatusCode, response);
