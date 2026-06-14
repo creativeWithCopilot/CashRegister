@@ -22,7 +22,5 @@ namespace CashRegister.DTOs.ProductDTOs
 
         // Navigation Property: Multiple Product can be associated with a single category.
         public int CategoryId { get; set; } // Required foreign key property
-
-        public DateTime UpdatedAt { get; set; }
     }
 }

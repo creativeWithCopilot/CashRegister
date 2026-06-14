@@ -6,48 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CashRegister.Migrations
 {
     /// <inheritdoc />
-    public partial class withSoftDelete : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Taxes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Rate = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Taxes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transactions",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Subtotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    TaxTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Payment = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
@@ -56,18 +19,27 @@ namespace CashRegister.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TaxId = table.Column<int>(type: "INTEGER", nullable: false)
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categories_Taxes_TaxId",
-                        column: x => x.TaxId,
-                        principalTable: "Taxes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    TaxTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,9 +50,7 @@ namespace CashRegister.Migrations
                     Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,18 +70,17 @@ namespace CashRegister.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     TransactionId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<string>(type: "TEXT", nullable: false),
+                    PLUCode = table.Column<string>(type: "TEXT", nullable: false),
                     Quantity = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    LineTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    TaxAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false)
+                    UnitPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    LineTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SaleItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SaleItems_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_SaleItems_Products_PLUCode",
+                        column: x => x.PLUCode,
                         principalTable: "Products",
                         principalColumn: "PLUCode",
                         onDelete: ReferentialAction.Restrict);
@@ -124,19 +93,14 @@ namespace CashRegister.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_TaxId",
-                table: "Categories",
-                column: "TaxId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleItems_ProductId",
+                name: "IX_SaleItems_PLUCode",
                 table: "SaleItems",
-                column: "ProductId");
+                column: "PLUCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaleItems_TransactionId",
@@ -158,9 +122,6 @@ namespace CashRegister.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Taxes");
         }
     }
 }

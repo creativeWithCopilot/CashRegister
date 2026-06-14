@@ -25,19 +25,12 @@ namespace CashRegister.Services
                     return new ApiResponse<CategoryResponseDTO>(400, "This category already exists.");
                 }
 
-                // Check if category exists
-                if (!await _context.Taxes.AnyAsync(tax => tax.Id == categoryDto.TaxId))
-                {
-                    return new ApiResponse<CategoryResponseDTO>(400, "The specified category type does not exist.");
-                }
-
                 // Manual mapping from DTO to Model
                 var category = new Category
                 {
                     Name = categoryDto.Name,
                     Description = categoryDto.Description,
                     IsActive = true,
-                    TaxId = categoryDto.TaxId
                 };
 
                 // Add category to the database
@@ -50,8 +43,7 @@ namespace CashRegister.Services
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
-                    IsActive = category.IsActive,
-                    TaxId = category.TaxId
+                    IsActive = category.IsActive
                 };
 
                 return new ApiResponse<CategoryResponseDTO>(200, categoryResponse);
@@ -82,8 +74,7 @@ namespace CashRegister.Services
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
-                    IsActive = category.IsActive,
-                    TaxId = category.TaxId,
+                    IsActive = category.IsActive
                 };
 
                 return new ApiResponse<CategoryResponseDTO>(200, categoryResponse);
@@ -100,6 +91,7 @@ namespace CashRegister.Services
             try
             {
                 var category = await _context.Categories.FindAsync(categoryDto.Id);
+
                 if (category == null)
                 {
                     return new ApiResponse<ConfirmationResponseDTO>(404, "This category already exists.");
@@ -111,17 +103,10 @@ namespace CashRegister.Services
                     return new ApiResponse<ConfirmationResponseDTO>(400, "Another category with the same name already exists.");
                 }
 
-                // Check if Category exists
-                if (!await _context.Taxes.AnyAsync(cat => cat.Id == categoryDto.TaxId))
-                {
-                    return new ApiResponse<ConfirmationResponseDTO>(400, "The specified type of tax does not exist.");
-                }
-
                 // Update product properties manually
                 category.Name = categoryDto.Name;
                 category.Description = categoryDto.Description;
                 category.IsActive = categoryDto.IsActive;
-                category.TaxId = categoryDto.TaxId;
 
                 await _context.SaveChangesAsync();
 
@@ -184,7 +169,6 @@ namespace CashRegister.Services
                     Name = c.Name,
                     Description = c.Description,
                     IsActive = c.IsActive,
-                    TaxId = c.TaxId
                 }).ToList();
 
                 return new ApiResponse<List<CategoryResponseDTO>>(200, categoryList);

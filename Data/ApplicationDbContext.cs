@@ -12,7 +12,6 @@ namespace CashRegister.Data
             
         }
         
-        public DbSet<Tax> Taxes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SaleItem> SaleItems { get; set; }
@@ -20,14 +19,6 @@ namespace CashRegister.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // One(Tax)-to-Many(Category) without navigation to dependents
-            modelBuilder.Entity<Category>()
-                .HasOne(c => c.Tax)
-                .WithMany()
-                .HasForeignKey(c => c.TaxId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
             // One(Category)-to-Many(Product) without navigation to dependents
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
@@ -40,7 +31,7 @@ namespace CashRegister.Data
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Product)
                 .WithMany()
-                .HasForeignKey(s => s.ProductId)
+                .HasForeignKey(s => s.PLUCode)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 

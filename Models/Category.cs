@@ -16,10 +16,5 @@ namespace CashRegister.Models
         public string Description { get; set; }
 
         public bool IsActive { get; set; }
-
-        // Navigation Property: Multiple categories can be associated with a single tax.
-        public int TaxId { get; set; } // Required foreign key property
-        [ForeignKey("TaxId")]
-        public Tax Tax { get; set; } = null!; // Required reference navigation to principal
     }
 }

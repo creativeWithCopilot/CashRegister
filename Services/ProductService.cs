@@ -37,8 +37,8 @@ namespace CashRegister.Services
                     PLUCode = productDto.PLUCode,
                     Description = productDto.Description,
                     Price = productDto.Price,
-                    CategoryId = productDto.CategoryId,
-                    CreatedAt = DateTime.Now
+                    IsActive = true,
+                    CategoryId = productDto.CategoryId
                 };
 
                 // Add product to the database
@@ -52,9 +52,7 @@ namespace CashRegister.Services
                     Description = product.Description,
                     Price = product.Price,
                     IsActive = product.IsActive,
-                    CategoryId = product.CategoryId,
-                    CreatedAt = product.CreatedAt,
-                    UpdatedAt = product.UpdatedAt
+                    CategoryId = product.CategoryId
                 };
 
                 return new ApiResponse<ProductResponseDTO>(200, productResponse);
@@ -86,9 +84,7 @@ namespace CashRegister.Services
                     Description = product.Description,
                     Price = product.Price,
                     IsActive = product.IsActive,
-                    CategoryId = product.CategoryId,
-                    CreatedAt = product.CreatedAt,
-                    UpdatedAt = product.UpdatedAt
+                    CategoryId = product.CategoryId
                 };
 
                 return new ApiResponse<ProductResponseDTO>(200, productResponse);
@@ -110,12 +106,6 @@ namespace CashRegister.Services
                     return new ApiResponse<ConfirmationResponseDTO>(404, "Product not found.");
                 }
 
-                // Check if the new PLU code already exists, excluding the current product
-                if (await _context.Products.AnyAsync(p => p.PLUCode != productDto.PLUCode))
-                {
-                    return new ApiResponse<ConfirmationResponseDTO>(400, "Another product with the same PLU code already exists.");
-                }
-
                 // Check if Category exists
                 if (!await _context.Categories.AnyAsync(cat => cat.Id == productDto.CategoryId))
                 {
@@ -128,7 +118,6 @@ namespace CashRegister.Services
                 product.Price = productDto.Price;
                 product.IsActive = productDto.IsActive;
                 product.CategoryId = productDto.CategoryId;
-                product.UpdatedAt = DateTime.Now;
 
                 await _context.SaveChangesAsync();
 
@@ -192,9 +181,7 @@ namespace CashRegister.Services
                     Description = p.Description,
                     Price = p.Price,
                     IsActive = p.IsActive,
-                    CategoryId = p.CategoryId,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt
+                    CategoryId = p.CategoryId
                 }).ToList();
 
                 return new ApiResponse<List<ProductResponseDTO>>(200, productList);
@@ -228,9 +215,7 @@ namespace CashRegister.Services
                     Description = p.Description,
                     Price = p.Price,
                     IsActive = p.IsActive,
-                    CategoryId = p.CategoryId,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt
+                    CategoryId = p.CategoryId
                 }).ToList();
 
                 return new ApiResponse<List<ProductResponseDTO>>(200, productList);

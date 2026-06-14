@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashRegister.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260613042939_withSoftDelete")]
-    partial class withSoftDelete
+    [Migration("20260614075932_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,12 +39,7 @@ namespace CashRegister.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TaxId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TaxId");
 
                     b.ToTable("Categories");
                 });
@@ -57,9 +52,6 @@ namespace CashRegister.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -70,9 +62,6 @@ namespace CashRegister.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("PLUCode");
 
@@ -90,60 +79,26 @@ namespace CashRegister.Migrations
                     b.Property<decimal>("LineTotal")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<string>("ProductId")
+                    b.Property<string>("PLUCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
-
-                    b.Property<decimal>("TaxAmount")
-                        .HasColumnType("decimal(10,2)");
-
                     b.Property<long>("TransactionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(10,2)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("PLUCode");
 
                     b.HasIndex("TransactionId");
 
                     b.ToTable("SaleItems");
-                });
-
-            modelBuilder.Entity("CashRegister.Models.Tax", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Taxes");
                 });
 
             modelBuilder.Entity("CashRegister.Models.Transaction", b =>
@@ -152,17 +107,8 @@ namespace CashRegister.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Payment")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
 
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(10,2)");
@@ -170,29 +116,12 @@ namespace CashRegister.Migrations
                     b.Property<decimal>("TaxTotal")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("CashRegister.Models.Category", b =>
-                {
-                    b.HasOne("CashRegister.Models.Tax", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Tax");
                 });
 
             modelBuilder.Entity("CashRegister.Models.Product", b =>
@@ -210,7 +139,7 @@ namespace CashRegister.Migrations
                 {
                     b.HasOne("CashRegister.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("PLUCode")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
