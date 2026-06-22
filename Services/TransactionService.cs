@@ -41,7 +41,7 @@ namespace CashRegister.Services
                     // Calculate base price, tax, and total price for the order item.
                     decimal basePrice = saleItemDto.Quantity * product.Price;
 
-                    // Create a new SaleItem.
+                    // Create a new SaleItem to attach to the transaction.
                     var saleItem = new SaleItem
                     {
                         PLUCode = product.PLUCode,
@@ -57,7 +57,7 @@ namespace CashRegister.Services
                     subtotal += basePrice;
                 }
 
-                // Calculate the final total amount.
+                // Apply a fixed tax rate and compute the grand total.
                 taxToal = subtotal * 0.05m;
                 total = subtotal + taxToal;
 
@@ -119,9 +119,9 @@ namespace CashRegister.Services
             {
                 // Retrieve all orders with related entities.
                 var transaction = await _context.Transactions
-                    .Include(t => t.SaleItems)
-                        .ThenInclude(si => si.Product)
-                    .AsNoTracking()
+                    .Include(t => t.SaleItems) // load related entities
+                        .ThenInclude(si => si.Product) // include nested relationships
+                    .AsNoTracking() //Don't track changes
                     .ToListAsync();
 
                 // Map each order to its corresponding DTO.

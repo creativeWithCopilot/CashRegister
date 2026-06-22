@@ -9,7 +9,7 @@ namespace CashRegister.Services
     public class CategoryService
     {
         private readonly ApplicationDbContext _context;
-
+        
         public CategoryService(ApplicationDbContext context)
         {
             _context = context;
@@ -60,8 +60,8 @@ namespace CashRegister.Services
             try
             {
                 var category = await _context.Categories
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .AsNoTracking()  // A query method instructing EF Core to ignore tracked entities.
+                    .FirstOrDefaultAsync(c => c.Id == id); // Returns the first match found, or null if no match is found.
 
                 if (category == null)
                 {
@@ -90,7 +90,7 @@ namespace CashRegister.Services
         {
             try
             {
-                var category = await _context.Categories.FindAsync(categoryDto.Id);
+                var category = await _context.Categories.FindAsync(categoryDto.Id); //  Get an entity asynchronously using its primary key.
 
                 if (category == null)
                 {
@@ -98,7 +98,7 @@ namespace CashRegister.Services
                 }
 
                 // Check if the new category name already exists (case-insensitive), excluding the current category
-                if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower() && c.Id != categoryDto.Id))
+                if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower() && c.Id != categoryDto.Id)) // Checks if any elements in a sequence satisfy a condition or if the sequence is not empty.
                 {
                     return new ApiResponse<ConfirmationResponseDTO>(400, "Another category with the same name already exists.");
                 }
@@ -129,7 +129,7 @@ namespace CashRegister.Services
         {
             try
             {
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id); // Returns the first match found, or null if no match is found.
 
                 if (category == null)
                 {
@@ -160,8 +160,8 @@ namespace CashRegister.Services
             try
             {
                 var categories = await _context.Categories
-                    .AsNoTracking()
-                    .ToListAsync();
+                    .AsNoTracking() // A query method instructing EF Core to ignore tracked entities.
+                    .ToListAsync(); // that executes a database query and returns the results as a List<T> without blocking the calling thread
 
                 var categoryList = categories.Select(c => new CategoryResponseDTO
                 {
